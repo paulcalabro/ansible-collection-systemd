@@ -448,8 +448,11 @@ class SystemdUnitFile(object):
             new_file = old_checksum is None
             self.ensure_directory(os.path.dirname(unit_file))
             shutil.move(file_temporary, unit_file)
-            self.module.set_owner_if_different(unit_file, self.owner, False)
-            self.module.set_group_if_different(unit_file, self.group, False)
+
+        owner_changed = self.module.set_owner_if_different(unit_file, self.owner, False)
+        group_changed = self.module.set_group_if_different(unit_file, self.group, False)
+        changed = bool(changed or owner_changed or group_changed)
+        if changed:
             msg = "The unit-file was successfully changed"
 
         if new_file:
