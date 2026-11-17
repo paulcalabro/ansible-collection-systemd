@@ -11,7 +11,8 @@ tests/
 │   ├── aliases
 │   └── tasks/main.yml                    #   present / idempotency / check mode / absent / validation
 └── unit/plugins/modules/                 # ansible-test unit tests
-    └── test_systemd_timer.py             #   resolve_scope() / build_calendar_spec()
+    ├── test_systemd_timer.py             #   resolve_scope() / build_calendar_spec()
+    └── test_unit_file.py                 #   scope paths / directory ownership
 ```
 
 The `systemd_timer` tests are hermetic: they render unit files into a temporary
@@ -45,7 +46,8 @@ export ANSIBLE_COLLECTIONS_PATH="/tmp/sdtest:$HOME/.ansible/collections"
 
 ```sh
 PYTHONPATH=/tmp/sdtest python3 -m pytest \
-    tests/unit/plugins/modules/test_systemd_timer.py -v
+    tests/unit/plugins/modules/test_systemd_timer.py \
+    tests/unit/plugins/modules/test_unit_file.py -v
 ```
 
 ### Integration target via a wrapper play
