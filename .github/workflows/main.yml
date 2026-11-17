@@ -83,6 +83,10 @@ jobs:
           mkdir -p /home/runner/.ansible/collections
           ansible-galaxy collection install community.docker --force
 
+      - name: install collection dependencies
+        run: |
+          ansible-galaxy collection install 'bodsch.core:>=2.13.5'
+
       - name: Install collection
         run: |
           make \
