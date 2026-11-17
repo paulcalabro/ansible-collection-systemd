@@ -13,7 +13,8 @@ on:
     paths:
       - 'plugins/modules/systemd_timer.py'
       - 'plugins/module_utils/**'
-      - 'tests/**'
+      - 'tests/unit/plugins/modules/test_systemd_timer.py'
+      - 'tests/integration/targets/systemd_timer/**'
       - '.github/workflows/systemd_timer.yml'
 
   pull_request:
@@ -25,7 +26,8 @@ on:
     paths:
       - 'plugins/modules/systemd_timer.py'
       - 'plugins/module_utils/**'
-      - 'tests/**'
+      - 'tests/unit/plugins/modules/test_systemd_timer.py'
+      - 'tests/integration/targets/systemd_timer/**'
       - '.github/workflows/systemd_timer.yml'
 
 env:
@@ -63,16 +65,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5' --collections-path "$GITHUB_WORKSPACE"
-
       - name: ansible-test units
         working-directory: ansible_collections/bodsch/systemd
         run: |
           ansible-test units \
             --local \
             --requirements \
-            --python "${{ matrix.python_version }}"
+            --python "${{ matrix.python_version }}" \
+            systemd_timer
 
   integration:
     name: "integration / python ${{ matrix.python_version }}"
@@ -101,9 +101,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ansible-core
-
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5' --collections-path "$GITHUB_WORKSPACE"
 
       # The systemd_timer integration target is hermetic: it renders unit files
       # into a temporary directory with daemon_reload=false and without enabled,

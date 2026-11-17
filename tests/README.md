@@ -29,8 +29,12 @@ count). With the checkout located accordingly:
 cd .../ansible_collections/bodsch/systemd
 
 ansible-test units       --local --python 3.12 systemd_timer
+ansible-test units       --local --python 3.12 unit_file
 ansible-test integration --local --python 3.12 systemd_timer
 ```
+
+The `unit_file` tests require the `bodsch.core` collection declared in
+`galaxy.yml`.
 
 ## Running without that layout (quick, location-independent)
 
