@@ -362,7 +362,9 @@ class SystemdUnitFile(object):
 
         if isinstance(self.drop_ins, list) and len(self.drop_ins) > 0:
 
-            service_name = os.path.join(self.drop_in_base_path, f"{self.name}.d")
+            service_name = os.path.join(
+                self.drop_in_base_path, f"{self.name}.{self.unit_type}.d"
+            )
 
             for drop_in in self.drop_ins:
                 name = drop_in.get("name")
@@ -380,7 +382,9 @@ class SystemdUnitFile(object):
 
     def create_drop_in(self, data):
         """ """
-        service_name = os.path.join(self.drop_in_base_path, f"{self.name}.d")
+        service_name = os.path.join(
+            self.drop_in_base_path, f"{self.name}.{self.unit_type}.d"
+        )
 
         if not os.path.exists(service_name):
             self.ensure_directory(service_name)

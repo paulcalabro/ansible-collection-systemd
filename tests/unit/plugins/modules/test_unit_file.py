@@ -196,7 +196,9 @@ def test_run_writes_user_unit_and_drop_in_with_target_ownership(monkeypatch, tmp
     result = SystemdUnitFile(module).run()
 
     unit_path = os.path.join(base_path, "backup.service")
-    drop_in_path = os.path.join(base_path, "backup.d", "environment.conf")
+    drop_in_path = os.path.join(
+        base_path, "backup.service.d", "environment.conf"
+    )
     assert result["changed"]
     assert os.path.exists(unit_path)
     assert os.path.exists(drop_in_path)

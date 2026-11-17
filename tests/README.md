@@ -12,7 +12,7 @@ tests/
 │   └── tasks/main.yml                    #   present / idempotency / check mode / absent / validation
 └── unit/plugins/modules/                 # ansible-test unit tests
     ├── test_systemd_timer.py             #   resolve_scope() / build_calendar_spec()
-    └── test_unit_file.py                 #   scope paths / directory ownership
+    └── test_unit_file.py                 #   resolve_scope() / ensure_directory() / run()
 ```
 
 The `systemd_timer` tests are hermetic: they render unit files into a temporary
