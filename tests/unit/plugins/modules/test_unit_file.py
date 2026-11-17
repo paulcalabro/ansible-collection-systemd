@@ -1,4 +1,4 @@
-# Unit tests for scope resolution in the unit_file module.
+# Unit tests for the unit_file module.
 
 from __future__ import absolute_import, division, print_function
 
