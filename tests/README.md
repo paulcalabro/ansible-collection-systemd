@@ -7,7 +7,7 @@ dedicated role or a molecule scenario.
 
 ```
 tests/
-├── integration/targets/systemd_timer/   # timer integration target
+├── integration/targets/systemd_timer/    # timer integration target
 │   ├── aliases
 │   └── tasks/main.yml                    #  present / idempotency / check mode / absent / validation
 ├── integration/targets/unit_file/        #  unit file integration target
