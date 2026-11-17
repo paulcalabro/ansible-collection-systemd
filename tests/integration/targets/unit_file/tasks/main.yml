@@ -17,7 +17,8 @@
     suffix: unit_file
   register: tmp_dir
 
-- vars:
+- name: exercise unit file and drop-in rendering
+  vars:
     base_path: "{{ tmp_dir.path }}"
     me: "{{ current_user.stdout }}"
     my_group: "{{ current_group.stdout }}"
@@ -159,7 +160,7 @@
         that:
           - repeat_drop_in is not changed
 
-    - name: reject user scope without a user
+    - name: reject user scope without a user  # noqa: args[module]
       bodsch.systemd.unit_file:
         name: missing-user
         scope: user
