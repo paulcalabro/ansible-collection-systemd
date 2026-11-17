@@ -102,6 +102,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
+      # The systemd_timer integration target is hermetic: it renders unit files
+      # into a temporary directory with daemon_reload=false and without enabled,
+      # so it needs neither root, python3-dbus nor a running service manager.
       - name: ansible-test integration (unit_file)
         working-directory: ansible_collections/bodsch/systemd
         run: |
