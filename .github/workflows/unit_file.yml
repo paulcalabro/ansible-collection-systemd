@@ -38,7 +38,7 @@ env:
 
 jobs:
   units:
-    name: "unit_file / python ${{ matrix.python_version }}"
+    name: "units / python ${{ matrix.python_version }}"
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -48,6 +48,8 @@ jobs:
           - "3.13"
 
     steps:
+      # ansible-test requires the checkout to live at
+      # <something>/ansible_collections/<namespace>/<name>/
       - name: check out the codebase into a collection layout
         uses: actions/checkout@v6.0.2
         with:
@@ -63,10 +65,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5' --collections-path "$GITHUB_WORKSPACE"
-
-      - name: ansible-test units (unit_file)
+      - name: ansible-test units
         working-directory: ansible_collections/bodsch/systemd
         run: |
           ansible-test units \
@@ -76,7 +75,7 @@ jobs:
             unit_file
 
   integration:
-    name: "unit_file integration / python ${{ matrix.python_version }}"
+    name: "integration / python ${{ matrix.python_version }}"
     runs-on: ubuntu-24.04
     needs:
       - units
@@ -102,9 +101,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ansible-core
-
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5' --collections-path "$GITHUB_WORKSPACE"
 
       - name: ansible-test integration (unit_file)
         working-directory: ansible_collections/bodsch/systemd
