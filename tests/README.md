@@ -7,9 +7,12 @@ dedicated role or a molecule scenario.
 
 ```
 tests/
-├── integration/targets/systemd_timer/   # ansible-test integration target
+├── integration/targets/systemd_timer/   # timer integration target
 │   ├── aliases
 │   └── tasks/main.yml                    #   present / idempotency / check mode / absent / validation
+├── integration/targets/unit_file/       # unit file integration target
+│   ├── aliases
+│   └── tasks/main.yml                    #   unit files / drop-ins / ownership / validation
 └── unit/plugins/modules/                 # ansible-test unit tests
     ├── test_systemd_timer.py             #   resolve_scope() / build_calendar_spec()
     └── test_unit_file.py                 #   resolve_scope() / ensure_directory() / run()
@@ -18,6 +21,8 @@ tests/
 The `systemd_timer` tests are hermetic: they render unit files into a temporary
 directory with `daemon_reload: false` and without `enabled`, so they need
 neither root, `python3-dbus` nor a running service manager.
+The `unit_file` integration tests likewise use a temporary directory and do not
+require root or a running service manager.
 
 ## Running with `ansible-test` (official)
 
@@ -31,10 +36,11 @@ cd .../ansible_collections/bodsch/systemd
 ansible-test units       --local --python 3.12 systemd_timer
 ansible-test units       --local --python 3.12 unit_file
 ansible-test integration --local --python 3.12 systemd_timer
+ansible-test integration --local --python 3.12 unit_file
 ```
 
-The `unit_file` tests require the `bodsch.core` collection declared in
-`galaxy.yml`.
+The `unit_file` unit and integration tests require the `bodsch.core` collection
+declared in `galaxy.yml`.
 
 ## Running without that layout (quick, location-independent)
 
