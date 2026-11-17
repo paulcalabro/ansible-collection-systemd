@@ -9,13 +9,13 @@ dedicated role or a molecule scenario.
 tests/
 ├── integration/targets/systemd_timer/   # timer integration target
 │   ├── aliases
-│   └── tasks/main.yml                    #   present / idempotency / check mode / absent / validation
-├── integration/targets/unit_file/       # unit file integration target
+│   └── tasks/main.yml                    #  present / idempotency / check mode / absent / validation
+├── integration/targets/unit_file/        #  unit file integration target
 │   ├── aliases
-│   └── tasks/main.yml                    #   unit files / drop-ins / ownership / validation
-└── unit/plugins/modules/                 # ansible-test unit tests
-    ├── test_systemd_timer.py             #   resolve_scope() / build_calendar_spec()
-    └── test_unit_file.py                 #   resolve_scope() / ensure_directory() / run()
+│   └── tasks/main.yml                    #  unit files / drop-ins / ownership / validation
+└── unit/plugins/modules/                 #  ansible-test unit tests
+    ├── test_systemd_timer.py             #  resolve_scope() / build_calendar_spec()
+    └── test_unit_file.py                 #  resolve_scope() / ensure_directory() / run()
 ```
 
 The `systemd_timer` tests are hermetic: they render unit files into a temporary
