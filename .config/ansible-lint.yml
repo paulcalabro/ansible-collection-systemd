@@ -3,5 +3,4 @@
 skip_list:
   - name[casing]
   - name[template]
-  # Roles use systemd_* facts shared with their templates and handlers.
-  - var-naming[no-role-prefix]
+  - var-naming[no-role-prefix]  # Roles use systemd_* facts shared with their templates and handlers.
