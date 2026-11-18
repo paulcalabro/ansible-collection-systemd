@@ -20,8 +20,8 @@
 - name: test unit file and drop-in lifecycle across scopes
   vars:
     base_path: "{{ tmp_dir.path }}"
-    me: "{{ current_user.stdout }}"
-    my_group: "{{ current_group.stdout }}"
+    current_user: "{{ current_user.stdout }}"
+    current_group: "{{ current_group.stdout }}"
   block:
     - name: create a system-scoped unit with explicit path and ownership
       bodsch.systemd.unit_file:
@@ -56,8 +56,8 @@
           - "'[Service]' in content"
           - "'ExecStart' in content"
           - "'/bin/true' in content"
-          - unit_stat.stat.pw_name == me
-          - unit_stat.stat.gr_name == my_group
+          - unit_stat.stat.pw_name == current_user
+          - unit_stat.stat.gr_name == current_group
       vars:
         content: "{{ rendered.content | b64decode }}"
 
@@ -104,8 +104,8 @@
         that:
           - user_result is changed
           - item.stat.exists
-          - item.stat.pw_name == me
-          - item.stat.gr_name == my_group
+          - item.stat.pw_name == current_user
+          - item.stat.gr_name == current_group
       loop: "{{ user_stats.results }}"
       loop_control:
         label: "{{ item.item }}"
@@ -138,8 +138,8 @@
           - drop_in_result is changed
           - "'[Service]' in (drop_in.content | b64decode)"
           - "'INTEGRATION=1' in (drop_in.content | b64decode)"
-          - drop_in_stat.stat.pw_name == me
-          - drop_in_stat.stat.gr_name == my_group
+          - drop_in_stat.stat.pw_name == current_user
+          - drop_in_stat.stat.gr_name == current_group
 
     - name: create the same drop-in again
       bodsch.systemd.unit_file:
