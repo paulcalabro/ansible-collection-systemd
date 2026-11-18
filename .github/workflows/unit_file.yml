@@ -65,6 +65,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
+      - name: Install collection
+        run: |
+          make \
+            install
+
       - name: ansible-test units
         working-directory: ansible_collections/bodsch/systemd
         run: |
