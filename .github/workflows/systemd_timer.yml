@@ -71,7 +71,8 @@ jobs:
           ansible-test units \
             --local \
             --requirements \
-            --python "${{ matrix.python_version }}"
+            --python "${{ matrix.python_version }}" \
+            systemd_timer
 
   integration:
     name: "integration / python ${{ matrix.python_version }}"
