@@ -1,5 +1,9 @@
 ---
-# Exercise unit files and drop-ins in a temporary directory, without systemd.
+# Integration tests for bodsch.systemd.unit_file.
+#
+# Scope: pure file rendering for system- and user-scoped units and drop-ins.
+# Everything happens inside a temporary directory without requiring root or
+# a running service manager.
 
 - name: determine the current user
   ansible.builtin.command: id -un
