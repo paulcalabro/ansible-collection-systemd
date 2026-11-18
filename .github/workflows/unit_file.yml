@@ -30,6 +30,9 @@ on:
       - 'tests/integration/targets/unit_file/**'
       - '.github/workflows/unit_file.yml'
 
+permissions:
+  contents: read
+
 env:
   COLLECTION_NAMESPACE: bodsch
   COLLECTION_NAME: systemd
