@@ -20,15 +20,15 @@
 - name: test unit file and drop-in lifecycle across scopes
   vars:
     base_path: "{{ tmp_dir.path }}"
-    me: "{{ current_user.stdout }}"
-    my_group: "{{ current_group.stdout }}"
+    test_user: "{{ current_user.stdout }}"
+    test_group: "{{ current_group.stdout }}"
   block:
     - name: create a system-scoped unit with explicit path and ownership
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ test_user }}"
+        group: "{{ test_group }}"
         unit_file:
           Unit:
             Description: Integration test service
@@ -56,8 +56,8 @@
           - "'[Service]' in content"
           - "'ExecStart' in content"
           - "'/bin/true' in content"
-          - unit_stat.stat.pw_name == me
-          - unit_stat.stat.gr_name == my_group
+          - unit_stat.stat.pw_name == test_user
+          - unit_stat.stat.gr_name == test_group
       vars:
         content: "{{ rendered.content | b64decode }}"
 
@@ -65,8 +65,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ test_user }}"
+        group: "{{ test_group }}"
         unit_file:
           Unit:
             Description: Integration test service
@@ -84,7 +84,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ test_user }}"
         path: "{{ base_path }}/user"
         unit_file:
           Unit:
@@ -104,8 +104,8 @@
         that:
           - user_result is changed
           - item.stat.exists
-          - item.stat.pw_name == me
-          - item.stat.gr_name == my_group
+          - item.stat.pw_name == test_user
+          - item.stat.gr_name == test_group
       loop: "{{ user_stats.results }}"
       loop_control:
         label: "{{ item.item }}"
@@ -114,7 +114,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ test_user }}"
         path: "{{ base_path }}/user"
         drop_ins:
           - name: override
@@ -138,14 +138,14 @@
           - drop_in_result is changed
           - "'[Service]' in (drop_in.content | b64decode)"
           - "'INTEGRATION=1' in (drop_in.content | b64decode)"
-          - drop_in_stat.stat.pw_name == me
-          - drop_in_stat.stat.gr_name == my_group
+          - drop_in_stat.stat.pw_name == test_user
+          - drop_in_stat.stat.gr_name == test_group
 
     - name: create the same drop-in again
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ test_user }}"
         path: "{{ base_path }}/user"
         drop_ins:
           - name: override
@@ -176,7 +176,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ test_user }}"
         path: "{{ base_path }}/user"
         state: absent
         drop_ins:
@@ -199,7 +199,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ test_user }}"
         path: "{{ base_path }}/user"
         state: absent
         unit_file:
@@ -222,8 +222,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ test_user }}"
+        group: "{{ test_group }}"
         state: absent
         unit_file:
           Unit:
@@ -245,8 +245,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ test_user }}"
+        group: "{{ test_group }}"
         state: absent
         unit_file:
           Unit:
