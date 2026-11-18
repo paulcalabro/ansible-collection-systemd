@@ -16,7 +16,7 @@
     suffix: systemd_timer
   register: tmp_dir
 
-- name: exercise systemd timer file rendering
+- name: test systemd timer file lifecycle and validation
   vars:
     base_path: "{{ tmp_dir.path }}"
     me: "{{ current_user.stdout }}"
