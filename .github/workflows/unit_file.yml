@@ -69,7 +69,7 @@ jobs:
           python -m pip install ansible-core
 
       - name: install collection
-        run: ansible-galaxy collection install git@github.com:bodsch/ansible-collection-core.git
+        run: ansible-galaxy collection install bodsch.core
 
       - name: ansible-test units
         working-directory: ansible_collections/bodsch/systemd
@@ -109,7 +109,7 @@ jobs:
           python -m pip install ansible-core
 
       - name: install collection
-        run: ansible-galaxy collection install git@github.com:bodsch/ansible-collection-core.git
+        run: ansible-galaxy collection install bodsch.core
 
       # The systemd_timer integration target is hermetic: it renders unit files
       # into a temporary directory with daemon_reload=false and without enabled,
