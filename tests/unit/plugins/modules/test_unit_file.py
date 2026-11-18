@@ -149,6 +149,45 @@ def test_ensure_directory_assigns_owner_group_and_mode(tmp_path):
     assert [call[1] for call in unit_file.module.mode_calls] == ["0755"] * 3
 
 
+def test_changed_reconciles_ownership_when_content_is_unchanged(monkeypatch, tmp_path):
+    class _Checksum:
+        def checksum_from_file(self, path):
+            with open(path, "rb") as unit_file:
+                return hashlib.sha256(unit_file.read()).hexdigest()
+
+    module = FakeModule()
+
+    def set_owner(*args):
+        module.owner_calls.append(args)
+        return True
+
+    def set_group(*args):
+        module.group_calls.append(args)
+        return True
+
+    monkeypatch.setattr(module, "set_owner_if_different", set_owner)
+    monkeypatch.setattr(module, "set_group_if_different", set_group)
+
+    destination = tmp_path / "backup.service"
+    temporary = tmp_path / "backup.service.tmp"
+    content = b"[Unit]\nDescription=Backup\n"
+    destination.write_bytes(content)
+    temporary.write_bytes(content)
+
+    unit_file = make_unit_file()
+    unit_file.module = module
+    unit_file.owner = "alice"
+    unit_file.group = "users"
+    unit_file.checksum = _Checksum()
+
+    result = unit_file._SystemdUnitFile__changed(str(temporary), str(destination))
+
+    assert result["changed"]
+    assert module.owner_calls == [(str(destination), "alice", False)]
+    assert module.group_calls == [(str(destination), "users", False)]
+    assert destination.read_bytes() == content
+
+
 def test_run_writes_user_unit_and_drop_in_with_target_ownership(monkeypatch, tmp_path):
     class _PW:
         pw_dir = str(tmp_path / "home")
