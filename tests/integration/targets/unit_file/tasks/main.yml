@@ -17,20 +17,18 @@
     suffix: unit_file
   register: tmp_dir
 
-- name: exercise unit file and drop-in rendering
+- name: test unit file and drop-in lifecycle across scopes
   vars:
     base_path: "{{ tmp_dir.path }}"
     me: "{{ current_user.stdout }}"
     my_group: "{{ current_group.stdout }}"
-    # unit_file's python3 shebang uses Ansible's python3-specific override.
-    ansible_python3_interpreter: "{{ ansible_playbook_python }}"
   block:
     - name: create a system-scoped unit with explicit path and ownership
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ current_user }}"
+        group: "{{ current_group }}"
         unit_file:
           Unit:
             Description: Integration test service
@@ -67,8 +65,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ current_user }}"
+        group: "{{ current_group }}"
         unit_file:
           Unit:
             Description: Integration test service
@@ -86,7 +84,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ current_user }}"
         path: "{{ base_path }}/user"
         unit_file:
           Unit:
@@ -116,7 +114,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ current_user }}"
         path: "{{ base_path }}/user"
         drop_ins:
           - name: override
@@ -147,7 +145,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ current_user }}"
         path: "{{ base_path }}/user"
         drop_ins:
           - name: override
@@ -178,7 +176,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ current_user }}"
         path: "{{ base_path }}/user"
         state: absent
         drop_ins:
@@ -201,7 +199,7 @@
       bodsch.systemd.unit_file:
         name: user-integration
         scope: user
-        user: "{{ me }}"
+        user: "{{ current_user }}"
         path: "{{ base_path }}/user"
         state: absent
         unit_file:
@@ -224,8 +222,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ current_user }}"
+        group: "{{ current_group }}"
         state: absent
         unit_file:
           Unit:
@@ -247,8 +245,8 @@
       bodsch.systemd.unit_file:
         name: integration
         path: "{{ base_path }}/system"
-        owner: "{{ me }}"
-        group: "{{ my_group }}"
+        owner: "{{ current_user }}"
+        group: "{{ current_group }}"
         state: absent
         unit_file:
           Unit:
