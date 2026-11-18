@@ -68,15 +68,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5'
-
-      - name: prepare collection install source path
-        run: ln -s systemd ansible_collections/bodsch/ansible-collection-systemd
-
       - name: Install collection
-        working-directory: ansible_collections/bodsch/systemd
-        run: make install
+        run: |
+          make \
+            install
 
       - name: ansible-test units
         working-directory: ansible_collections/bodsch/systemd
@@ -115,15 +110,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ansible-core
 
-      - name: install collection dependencies
-        run: ansible-galaxy collection install 'bodsch.core:>=2.13.5'
-
-      - name: prepare collection install source path
-        run: ln -s systemd ansible_collections/bodsch/ansible-collection-systemd
-
       - name: Install collection
-        working-directory: ansible_collections/bodsch/systemd
-        run: make install
+        run: |
+          make \
+            install
 
       # The systemd_timer integration target is hermetic: it renders unit files
       # into a temporary directory with daemon_reload=false and without enabled,
