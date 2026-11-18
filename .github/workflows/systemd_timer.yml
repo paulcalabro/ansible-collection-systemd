@@ -108,4 +108,8 @@ jobs:
       - name: ansible-test integration (systemd_timer)
         working-directory: ansible_collections/bodsch/systemd
         run: |
-          ansible-test integration --local --requirements --python "${{ matrix.python_version }}" systemd_timer
+          ansible-test integration \
+            --local \
+            --requirements \
+            --python "${{ matrix.python_version }}" \
+            systemd_timer
